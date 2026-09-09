@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>فرم داوری پروژه‌های پایانی — آکادمی هوش مصنوعی مفید</title>
+<meta name="description" content="فرم امتیازدهی داوران پروژه‌های پایانی آکادمی هوش مصنوعی کارگزاری مفید">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#eceeed; --surface:#ffffff; --surface-2:#f5f7f6;
+  --ink:#0f1b1e; --ink-2:#3d4f52; --muted:#6b7c7e;
+  --line:#d2d9d7; --line-soft:#e2e7e5;
+  --accent:#0c6459; --accent-soft:#e0efec; --accent-ink:#0a5049;
+  --signal:#a8481a; --signal-soft:#f7e9e1;
+  --good:#2c6b4c; --good-soft:#e2efe7;
+  --warn:#8f6512; --warn-soft:#f6eedb;
+  --crit:#9c3527; --crit-soft:#f6e4e1;
+  --f-display:'Markazi Text','Vazirmatn',serif;
+  --f-body:'Vazirmatn',system-ui,sans-serif;
+  --shadow:0 1px 2px rgba(15,27,30,.05),0 10px 30px -14px rgba(15,27,30,.22);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0b1315; --surface:#121e21; --surface-2:#17262a;
+    --ink:#e4ecea; --ink-2:#b3c4c3; --muted:#8a9d9d;
+    --line:#26383c; --line-soft:#1e2d31;
+    --accent:#4fb5a3; --accent-soft:#12312e; --accent-ink:#7fcfc0;
+    --signal:#dd8b5c; --signal-soft:#332014;
+    --good:#63b98c; --good-soft:#12291d;
+    --warn:#cfa347; --warn-soft:#2b2312;
+    --crit:#dc7d6c; --crit-soft:#2e1815;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0b1315; --surface:#121e21; --surface-2:#17262a;
+  --ink:#e4ecea; --ink-2:#b3c4c3; --muted:#8a9d9d;
+  --line:#26383c; --line-soft:#1e2d31;
+  --accent:#4fb5a3; --accent-soft:#12312e; --accent-ink:#7fcfc0;
+  --signal:#dd8b5c; --signal-soft:#332014;
+  --good:#63b98c; --good-soft:#12291d;
+  --warn:#cfa347; --warn-soft:#2b2312;
+  --crit:#dc7d6c; --crit-soft:#2e1815;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:15px; line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column;
+}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- progress rail ---------- */
+.rail{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.rail-in{max-width:820px;margin:0 auto;padding:12px 20px 10px;display:flex;flex-direction:column;gap:9px}
+.rail-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rail-brand{font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.rail-ctx{margin-inline-start:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.c-tech{background:var(--accent-soft);color:var(--accent-ink)}
+.c-biz{background:var(--warn-soft);color:var(--warn)}
+.c-neutral{background:var(--surface);color:var(--ink-2);border:1px solid var(--line)}
+.bar{height:4px;background:var(--line-soft);border-radius:100px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:100px;transition:width .35s cubic-bezier(.4,0,.2,1);width:0}
+.rail-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ---------- stage ---------- */
+main{flex:1;display:flex;flex-direction:column}
+.stage{max-width:820px;width:100%;margin:0 auto;padding:32px 20px 40px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-size:11.5px;letter-spacing:.16em;font-weight:700;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(38px,7vw,58px);line-height:1.1;text-wrap:balance}
+h2.q{font-size:clamp(21px,3.4vw,27px);font-weight:600;line-height:1.5;text-wrap:balance;letter-spacing:-.01em}
+p{line-height:1.85}
+.dim{color:var(--ink-2)}
+.small{font-size:13px;line-height:1.75;color:var(--muted)}
+
+.guide{background:var(--surface);border:1px solid var(--line);border-inline-start:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:15px 18px;font-size:13.5px;line-height:1.85;color:var(--ink-2)}
+.guide b{color:var(--ink);font-weight:600}
+.guide .warnline{color:var(--signal);font-weight:600}
+
+/* ---------- scale buttons ---------- */
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.sb{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 10px 13px;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:border-color .18s,background .18s,transform .12s;text-align:center;min-height:104px}
+.sb:hover{border-color:var(--accent);transform:translateY(-2px)}
+.sb .n{font-family:var(--f-display);font-size:32px;font-weight:700;line-height:1;color:var(--accent)}
+.sb .t{font-size:11.5px;line-height:1.5;color:var(--muted)}
+.sb[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.sb[aria-pressed="true"] .n,.sb[aria-pressed="true"] .t{color:#fff}
+.na{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:12px 16px;cursor:pointer;
+  color:var(--muted);font-size:13.5px;transition:border-color .18s,color .18s;width:100%;text-align:center}
+.na:hover{border-color:var(--muted);color:var(--ink-2)}
+.na[aria-pressed="true"]{background:var(--surface-2);border-style:solid;border-color:var(--ink-2);color:var(--ink)}
+
+/* ---------- choice / gate ---------- */
+.choices{display:flex;flex-direction:column;gap:9px}
+.ch{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 18px;cursor:pointer;
+  display:flex;align-items:center;gap:13px;text-align:start;transition:border-color .18s,background .18s}
+.ch:hover{border-color:var(--accent)}
+.ch .key{font-size:11.5px;font-weight:700;color:var(--muted);min-width:18px;font-variant-numeric:tabular-nums}
+.ch .lab{font-size:15px;font-weight:500;flex:1;line-height:1.6}
+.ch .sub{display:block;font-size:12.5px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.6}
+.ch[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.ch[aria-pressed="true"] .lab,.ch[aria-pressed="true"] .key,.ch[aria-pressed="true"] .sub{color:#fff}
+.ch[aria-pressed="true"] .sub{opacity:.85}
+.gate-g[aria-pressed="true"]{background:var(--good);border-color:var(--good)}
+.gate-w[aria-pressed="true"]{background:var(--warn);border-color:var(--warn)}
+.gate-b[aria-pressed="true"]{background:var(--crit);border-color:var(--crit)}
+
+/* ---------- num10 ---------- */
+.n10{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.nb{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 0;cursor:pointer;
+  font-variant-numeric:tabular-nums;font-weight:600;font-size:15px;transition:border-color .18s,background .18s}
+.nb:hover{border-color:var(--accent)}
+.nb[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ---------- inputs ---------- */
+.field{display:flex;flex-direction:column;gap:7px}
+label.fl{font-size:13px;font-weight:600;color:var(--ink-2)}
+input[type=text],select,textarea{
+  background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:13px 15px;width:100%;
+  line-height:1.7;transition:border-color .18s}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
+textarea{resize:vertical;min-height:110px}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(0% + 18px) calc(50% + 2px),calc(0% + 23px) calc(50% + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-inline-start:40px}
+.counter{font-size:11.5px;color:var(--muted);text-align:start;font-variant-numeric:tabular-nums}
+
+/* ---------- nav ---------- */
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:4px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:100px;padding:12px 24px;cursor:pointer;
+  font-weight:600;font-size:14px;transition:background .18s,border-color .18s,opacity .18s}
+.btn:hover{border-color:var(--accent)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.hint{margin-inline-start:auto;font-size:11.5px;color:var(--muted)}
+kbd{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:10.5px;
+  font-family:var(--f-body);margin:0 2px}
+
+/* ---------- review ---------- */
+.rev{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.rev-h{padding:13px 18px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--ink-2)}
+.rv{display:grid;grid-template-columns:60px 1fr auto;gap:14px;padding:12px 18px;border-top:1px solid var(--line-soft);
+  align-items:baseline;cursor:pointer;transition:background .15s;text-align:start;width:100%;background:none;border-left:0;border-right:0;border-bottom:0}
+.rv:first-of-type{border-top:0}
+.rv:hover{background:var(--surface-2)}
+.rv .rid{font-size:12px;font-weight:700;color:var(--accent);direction:ltr;text-align:start}
+.rv .rq{font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.rv .ra{font-size:13.5px;font-weight:600;white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+.rv .ra.empty{color:var(--crit);font-weight:500}
+
+.note{background:var(--accent-soft);border-inline-start:3px solid var(--accent);border-radius:0 8px 8px 0;
+  padding:14px 18px;font-size:13.5px;line-height:1.8}
+.alert{background:var(--signal-soft);border-inline-start:3px solid var(--signal);border-radius:0 8px 8px 0;
+  padding:14px 18px;font-size:13.5px;line-height:1.8}
+.okbox{background:var(--good-soft);border-inline-start:3px solid var(--good);border-radius:0 8px 8px 0;
+  padding:14px 18px;font-size:13.5px;line-height:1.8}
+
+.done-mark{font-family:var(--f-display);font-size:64px;line-height:1;color:var(--good)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+  border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-inline-end:7px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.fadein{animation:fi .28s cubic-bezier(.4,0,.2,1)}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+footer{border-top:1px solid var(--line);padding:16px 20px;text-align:center;font-size:11.5px;color:var(--muted)}
+
+@media (max-width:640px){
+  .stage{padding:24px 16px 32px;gap:18px}
+  .scale{grid-template-columns:repeat(5,1fr);gap:5px}
+  .sb{padding:12px 4px 10px;min-height:96px}
+  .sb .n{font-size:25px}
+  .sb .t{font-size:10px}
+  .n10{grid-template-columns:repeat(6,1fr)}
+  .rv{grid-template-columns:48px 1fr;gap:8px}
+  .rv .ra{grid-column:1/-1;max-width:none;white-space:normal}
+  .hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="rail">
+  <div class="rail-in">
+    <div class="rail-top">
+      <span class="rail-brand">داوری پروژه‌های پایانی · آکادمی هوش مصنوعی مفید</span>
+      <div class="rail-ctx" id="ctx"></div>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="rail-meta">
+      <span id="secLabel">شروع</span>
+      <span id="stepLabel"></span>
+    </div>
+  </div>
+</div>
+
+<main><div class="stage" id="stage"></div></main>
+
+<footer>پاسخ‌ها به‌صورت خودکار روی این دستگاه ذخیره می‌شوند؛ اگر صفحه بسته شد، از همان‌جا ادامه می‌دهید.</footer>
+
+<script>
+/* ============================================================
+   ۱) تنظیمات — آدرس Apps Script را اینجا بگذارید
+   ============================================================ */
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbyHedYn4IW0q5F9e2Rs3VUEUs5tig05jWfAvQOmiLM0FCHfYcXa5qp-m_Ijdex0GLxdbQ/exec";
+
+/* ============================================================
+   ۲) پروژه‌ها
+   ============================================================ */
+const PROJECTS = [
+  {id:"P1", student:"پارسا نصیری",      title:"یافتن گلوگاه‌ها، تشخیص تغییر فرآیندهای قدیمی و ترسیم خودکار فرآیندهای جدید", type:"hybrid",  mentor:"فاطمه حسینی"},
+  {id:"P2", student:"امیرمحمد صالح",    title:"چت‌بات RAG داخلی آموزشی با پاسخ هوشمند و ثبت تیکت",                          type:"llm",     mentor:"فتانه عاشوری"},
+  {id:"P3", student:"محمد عقلی",        title:"طبقه‌بندی هوشمند علت تماس مشتری",                                            type:"ml",      mentor:"سینا محمدی"},
+  {id:"P4", student:"پارسا آقاعلی",     title:"تحلیل مکالمات برای کشف علت‌های پرتکرار جدید",                                type:"hybrid",  mentor:"علیرضا بهارلو"},
+  {id:"P5", student:"علی گلپایگانی",    title:"تحلیل و سیستم هشدار WallBoard",                                              type:"ml",      mentor:"حسین باقری"},
+  {id:"P6", student:"امیرمحمد کمیجانی", title:"پیش‌بینی حجم تماس و تیکت",                                                   type:"ml",      mentor:"محمدامین قاسمی"},
+  {id:"P7", student:"علی ایمانقلی",     title:"شناسایی مشتری در معرض ریزش",                                                 type:"ml",      mentor:"حدیث برزگر جهانی"},
+  {id:"P8", student:"مهدی فرخ باروقی",  title:"نظرسنجی تماس شخصی‌سازی‌شده",                                                type:"llm",     mentor:"آرمین شفیع‌نژاد"},
+  {id:"P9", student:"علی علیزاده",      title:"تشخیص نارضایتی و فوریت در مکالمات",                                          type:"hybrid",  mentor:"آرمین شفیع‌نژاد"}
+];
+const TYPE_LABEL = {llm:"ایجنت / LLM", ml:"ML کلاسیک", hybrid:"ترکیبی"};
+
+/* لنگرهای مقیاس ۱ تا ۵ */
+const SCALE = [
+  {v:1, t:"وجود ندارد یا اشتباه است"},
+  {v:2, t:"ناقص یا سطحی"},
+  {v:3, t:"در حد انتظار دوره"},
+  {v:4, t:"بالاتر از انتظار"},
+  {v:5, t:"در سطح کار حرفه‌ای"}
+];
+
+/* ============================================================
+   ۳) بانک سؤالات
+   ============================================================ */
+const GATE_OPTS = [
+  {v:"بله",   label:"بله",   sub:"شرط کاملاً برقرار است",             cls:"gate-g"},
+  {v:"جزئی",  label:"جزئی",  sub:"با نقص یا با دستکاری برقرار شد",   cls:"gate-w"},
+  {v:"خیر",   label:"خیر",   sub:"شرط برقرار نیست",                   cls:"gate-b"}
+];
+
+const GATES = [
+  {id:"G1", block:"گیت‌ها", title:"پنج قلم تحویلی کامل است؟",
+   guide:"سورس کد، README، requirements، فایل ارائه، ویدئوی دمو — همه در یک ZIP.<br><b>پیامد «خیر»:</b> ۴۸ ساعت مهلت اصلاح؛ پس از آن ۱۰ امتیاز از نمره‌ی نهایی کسر می‌شود."},
+  {id:"G2", block:"گیت‌ها", title:"پروژه روی محیط تمیز اجرا شد؟",
+   guide:"روی یک محیط خالی، فقط با دنبال‌کردن README اجرا کن.<br><b>پیامد «خیر»:</b> سقف نمره‌ی بلوک ۲ روی ۲ از ۵ می‌ماند."},
+  {id:"G3", block:"گیت‌ها", title:"کار اصیل است؟",
+   guide:"استفاده از کتابخانه و نمونه‌کد عادی و مجاز است؛ برداشتن یک مخزن عمومی و تغییر نام، نه. ذکر منبع کافی است.<br><b>پیامد «خیر»:</b> پروژه از رتبه‌بندی خارج و موضوع جداگانه بررسی می‌شود."},
+  {id:"G4", block:"گیت‌ها", title:"داده‌ی مشتری از سازمان خارج نشده است؟",
+   guide:"آیا متن مکالمات یا اطلاعات هویتی مشتری بدون پوشاندن به یک سرویس بیرونی (API مدل زبانی) ارسال شده؟ کلید API در مخزن رها شده؟<br><span class='warnline'>این را حتماً با خواندن کد چک کن — در اسلاید ارائه دیده نمی‌شود.</span><br><b>پیامد «خیر»:</b> ثبت در گزارش، سقف ۳ برای آیتم ۱٫۴، ارجاع به تیم امنیت اطلاعات."}
+];
+
+const BLOCK1 = [
+  {id:"1.1", block:"بلوک ۱ — مسئله و ارزش", title:"مسئله چقدر دقیق تعریف شده؟",
+   guide:"<b>دنبال این باش:</b> آیا مشخص است چه کسی، در چه لحظه‌ای، چه تصمیمی می‌گیرد که الان سخت است؟ «بهبود تجربه‌ی مشتری» تعریف مسئله نیست.<br><b>۵ یعنی:</b> کاربر، لحظه‌ی استفاده و وضعیت فعلی بدون ابزار، هر سه مشخص‌اند."},
+  {id:"1.2", block:"بلوک ۱ — مسئله و ارزش", title:"ارزش، قابل اندازه‌گیری است؟",
+   guide:"<b>دنبال این باش:</b> عدد. دقیقه‌ی صرفه‌جویی‌شده در هر تماس، درصد تیکت منحرف‌شده، تعداد مشتری حفظ‌شده.<br><b>۵ یعنی:</b> عدد هست، منبعش گفته شده، و به یک معیار واقعی مرکز تماس وصل است. <b>۲ یعنی:</b> ارزش فقط توصیفی است."},
+  {id:"1.3", block:"بلوک ۱ — مسئله و ارزش", title:"با فرآیند و سامانه‌های واقعی مفید جور درمی‌آید؟",
+   guide:"<b>دنبال این باش:</b> کجای گردش کار فعلی می‌نشیند؟ به کدام سامانه‌ی داخلی وصل می‌شود؟ بعد از استقرار، مالکش کدام تیم است؟<br><b>۵ یعنی:</b> نقطه‌ی اتصال و تیم مالک هر دو نام برده شده‌اند."},
+  {id:"1.4", block:"بلوک ۱ — مسئله و ارزش", title:"امکان‌سنجی استقرار و آگاهی از ریسک",
+   guide:"<b>دنبال این باش:</b> در دسترس بودن پایدار داده، هزینه‌ی اجرا، حریم داده‌ی مشتری، و مهم‌تر از همه: اگر ابزار اشتباه کند چه اتفاقی برای مشتری می‌افتد؟<br><b>۵ یعنی:</b> حالت‌های شکست را خودش نام می‌برد، نه اینکه داور کشف کند."}
+];
+
+function block2(projType){
+  const depth = projType === "ml"
+    ? "<b>این پروژه ML کلاسیک است — دنبال این باش:</b> مهندسی ویژگی، منطق انتخاب مدل، استراتژی اعتبارسنجی، برخورد با عدم توازن کلاس‌ها و کالیبراسیون."
+    : projType === "llm"
+    ? "<b>این پروژه ایجنت/LLM است — دنبال این باش:</b> طراحی prompt و ابزارها، grounding و مهار توهم، ارزیابی خروجی مدل زبانی (چطور فهمیده جواب درست است؟)، آگاهی از هزینه و تأخیر."
+    : "<b>این پروژه ترکیبی است — هر دو وجه را ببین:</b> از سمت LLM طراحی prompt و ابزارها، grounding، مهار توهم و ارزیابی خروجی؛ از سمت کلاسیک مهندسی ویژگی، انتخاب مدل و اعتبارسنجی.<br><span class='warnline'>ضعیف‌ترین وجه را ملاک کل نمره قرار نده.</span>";
+  return [
+  {id:"2.1", block:"بلوک ۲ — راه‌حل فنی", title:"رویکرد فنی متناسب و موجه است؟",
+   guide:"<b>دنبال این باش:</b> آیا ساده‌ترین راه‌حلی که کار می‌کند انتخاب شده؟ آیا می‌تواند توضیح دهد چرا این و نه بدیلش؟<br><span class='warnline'>هشدار: پیچیدگی بی‌دلیل امتیاز منفی است، نه مثبت.</span> یک regex که کار می‌کند از یک ترنسفورمر که نمی‌کند بهتر است."},
+  {id:"2.2", block:"بلوک ۲ — راه‌حل فنی", title:"نظم داده و ارزیابی",
+   guide:"<b>دنبال این باش:</b> خط پایه (baseline) دارد؟ تفکیک train/test درست است یا نشت داده هست؟ معیار انتخابی با هدف کسب‌وکاری هم‌راستاست (مثلاً برای ریزش، recall مهم‌تر از accuracy است)؟<br><b>۱ یعنی:</b> عددی گزارش شده که روی داده‌ی آموزش محاسبه شده."},
+  {id:"2.3", block:"بلوک ۲ — راه‌حل فنی", title:"عمق تخصصی متناسب با نوع پروژه", guide:depth},
+  {id:"2.4", block:"بلوک ۲ — راه‌حل فنی", title:"کیفیت کد و مهندسی",
+   guide:"<b>دنبال این باش:</b> ساختار پوشه‌ها و جداسازی مسئولیت‌ها، خوانایی و نام‌گذاری، مدیریت پیکربندی و کلیدها (نه هاردکد در کد)، مدیریت خطا.<br><b>۵ یعنی:</b> می‌شد این کد را به یک توسعه‌دهنده‌ی دیگر تحویل داد."},
+  {id:"2.5", block:"بلوک ۲ — راه‌حل فنی", title:"بازتولیدپذیری",
+   guide:"<b>عینی و قابل چک:</b> روی محیط تمیز، فقط با دنبال‌کردن README، اجرا شد؟ requirements کامل بود؟<br><b>۵:</b> بدون هیچ سؤالی اجرا شد · <b>۳:</b> با یکی دو دستکاری کوچک · <b>۱:</b> اجرا نشد."}
+  ];
+}
+
+const BLOCK3 = [
+  {id:"3.1", block:"بلوک ۳ — ارائه و تسلط", title:"کیفیت ارائه و دمو",
+   guide:"<b>دنبال این باش:</b> آیا در ۸ دقیقه توانست مسئله، راه‌حل، معماری و نتیجه را برساند؟ دمو چیز واقعی نشان داد یا اسلاید بود؟<br><span class='warnline'>نمره نده به: زیبایی رابط کاربری و انیمیشن.</span>"},
+  {id:"3.2", block:"بلوک ۳ — ارائه و تسلط", title:"عمق پاسخ زیر سؤال",
+   guide:"<b>دنبال این باش:</b> وقتی از یک انتخاب پرسیدی، می‌تواند بدیلش را هم توضیح دهد و بگوید چرا آن را نگرفت؟<br><b>۵ یعنی:</b> پاسخ‌ها عمیق‌تر از ارائه بودند. <b>۲ یعنی:</b> پاسخ‌ها تکرار اسلایدها بودند.<br>این آیتم بیشترین سیگنال را برای تصمیم جذب دارد."},
+  {id:"3.3", block:"بلوک ۳ — ارائه و تسلط", title:"صداقت درباره‌ی محدودیت‌ها",
+   guide:"<b>دنبال این باش:</b> خودش می‌داند کجا کار نمی‌کند؟ حاضر است بگوید «این را نمی‌دانم» یا «این بخش کار نکرد»؟<br><b>۵ یعنی:</b> پیش از آنکه داور بپرسد، ضعف‌های واقعی را خودش نام برد. <b>۱ یعنی:</b> ادعایی کرد که شواهدش وجود نداشت.<br>تمایزدهنده‌ترین آیتم کل پرسشنامه."}
+];
+
+const OPEN = [
+  {id:"O1", kind:"text", block:"پرسش‌های باز", title:"قوی‌ترین نقطه‌ی این پروژه چه بود؟",
+   guide:"حداکثر دو خط. این جمله مستقیم در بازخورد دانشجو استفاده می‌شود.", required:true, ph:"مثلاً: انتخاب معیار ارزیابی متناسب با هدف کسب‌وکاری و دفاع روشن از آن."},
+  {id:"O2", kind:"text", block:"پرسش‌های باز", title:"اگر فقط یک چیز را باید اصلاح کند، چیست؟",
+   guide:"حداکثر دو خط. مشخص و قابل اقدام بنویس، نه کلی.", required:true, ph:"مثلاً: خط پایه ندارد؛ بدون baseline نمی‌شود فهمید مدل واقعاً چیزی اضافه کرده یا نه."},
+  {id:"O3", kind:"text", block:"پرسش‌های باز", title:"چه چیزی را ادعا کرد که شواهدش را ندیدی؟",
+   guide:"اگر چنین چیزی نبود، بنویس «موردی نبود». این سؤال عمداً تیز نوشته شده: کارش این است که پروژه‌های «دموی براق روی چیز کم‌عمق» را بیرون بکشد.", required:true, ph:"مثلاً: ادعای ۹۲٪ دقت، ولی هیچ‌جا نگفت روی چه مجموعه‌ای اندازه‌گیری شده."},
+  {id:"O4", kind:"num10", block:"پرسش‌های باز", title:"مستقل از نمرات بالا، این پروژه را روی ۰ تا ۱۰ کلی چطور می‌بینی؟",
+   guide:"این عدد در نمره‌ی نهایی وارد نمی‌شود. کارش اعتبارسنجی خودِ پرسشنامه است: اگر با نمره‌ی وزنی هم‌خوان نباشد، یعنی معیارها چیزی را از قلم انداخته‌اند.", required:true}
+];
+
+const HIRING = [
+  {id:"H1", kind:"choice", block:"بلوک جذب (محرمانه)", title:"اگر الان جای خالی داشتیم، این فرد را به تیم دعوت می‌کردی؟",
+   guide:"این بلوک در نمره‌ی رتبه‌بندی پروژه‌ها وارد نمی‌شود و فقط برای تصمیم جذب استفاده می‌شود.",
+   options:[
+     {v:"قطعاً بله", label:"قطعاً بله"},
+     {v:"بله با تردید", label:"بله، با تردید"},
+     {v:"نه فعلاً", label:"نه فعلاً، شاید بعداً"},
+     {v:"نه", label:"نه"}
+   ], required:true},
+  {id:"H2", kind:"choice", block:"بلوک جذب (محرمانه)", title:"مناسب‌ترین نقش برایش کدام است؟",
+   guide:"بر اساس چیزی که در پاسخ‌هایش دیدی، نه بر اساس عنوان پروژه.",
+   options:[
+     {v:"داده و ML", label:"داده و ML"},
+     {v:"مهندسی نرم‌افزار", label:"مهندسی نرم‌افزار"},
+     {v:"تحلیل‌گر بیزینس-فنی", label:"تحلیل‌گر بیزینس-فنی"},
+     {v:"هنوز روشن نیست", label:"هنوز روشن نیست"}
+   ], required:true},
+  {id:"H3", kind:"text", block:"بلوک جذب (محرمانه)", title:"یک جمله: چه چیزی این فرد را متمایز کرد، یا چه چیزی مانع است؟",
+   guide:"یک جمله کافی است.", required:true, ph:"مثلاً: وقتی گیر افتاد، به‌جای توجیه‌کردن، دقیقاً گفت چه چیزی را نمی‌داند."}
+];
+
+/* ============================================================
+   ۴) وضعیت
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const el = (t,c,h) => { const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; };
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+let S = { judgeName:"", judgeType:"", projectId:"", answers:{}, idx:-1, startedAt:null, sending:false, sendError:"" };
+let QS = [];
+
+const draftKey = () => "davari:" + (S.judgeName||"?") + ":" + (S.projectId||"?");
+function saveDraft(){
+  if(!S.judgeName || !S.projectId) return;
+  try{ localStorage.setItem(draftKey(), JSON.stringify({answers:S.answers, idx:S.idx, judgeType:S.judgeType, startedAt:S.startedAt})); }catch(e){}
+}
+function loadDraft(){
+  try{
+    const raw = localStorage.getItem(draftKey());
+    if(!raw) return false;
+    const d = JSON.parse(raw);
+    S.answers = d.answers||{}; S.startedAt = d.startedAt||Date.now();
+    return Object.keys(S.answers).length > 0;
+  }catch(e){ return false; }
+}
+function clearDraft(){ try{ localStorage.removeItem(draftKey()); }catch(e){} }
+
+function outbox(){ try{ return JSON.parse(localStorage.getItem("davari:outbox")||"[]"); }catch(e){ return []; } }
+function pushOutbox(row){ try{ const o=outbox(); o.push(row); localStorage.setItem("davari:outbox", JSON.stringify(o)); }catch(e){} }
+function dropOutbox(stamp){ try{ localStorage.setItem("davari:outbox", JSON.stringify(outbox().filter(r=>r.submittedAt!==stamp))); }catch(e){} }
+
+function project(){ return PROJECTS.find(p=>p.id===S.projectId); }
+
+function buildQuestions(){
+  const p = project();
+  const scaleOf = arr => arr.map(q => Object.assign({kind:"scale"}, q));
+  if(S.judgeType === "فنی"){
+    QS = [].concat(
+      GATES.map(g=>Object.assign({kind:"gate", options:GATE_OPTS, required:true}, g)),
+      scaleOf(block2(p.type)),
+      scaleOf(BLOCK3), OPEN, HIRING
+    );
+  } else {
+    QS = [].concat(scaleOf(BLOCK1), scaleOf(BLOCK3), OPEN, HIRING);
+  }
+}
+
+/* ============================================================
+   ۵) رندر
+   ============================================================ */
+function renderRail(){
+  const ctx = $("ctx"); ctx.innerHTML = "";
+  if(S.judgeName){
+    ctx.appendChild(el("span","chip "+(S.judgeType==="فنی"?"c-tech":"c-biz"), "داور "+esc(S.judgeType)+" · "+esc(S.judgeName)));
+  }
+  const p = project();
+  if(p) ctx.appendChild(el("span","chip c-neutral", esc(p.id)+" · "+esc(p.student)));
+
+  const total = QS.length;
+  let pct = 0, step = "", sec = "شروع";
+  if(S.idx === -1){ pct = 0; }
+  else if(S.idx >= total){ pct = 100; sec = "بازبینی و ثبت"; step = "پایان"; }
+  else {
+    pct = Math.round((S.idx/total)*100);
+    sec = QS[S.idx].block;
+    step = "سؤال " + fa(S.idx+1) + " از " + fa(total);
+  }
+  $("barfill").style.width = pct + "%";
+  $("secLabel").textContent = sec;
+  $("stepLabel").textContent = step;
+}
+
+const FA_D = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+const fa = n => String(n).replace(/[0-9]/g, d => FA_D[+d]);
+
+function render(){
+  renderRail();
+  const st = $("stage"); st.innerHTML = ""; st.className = "stage fadein";
+  if(S.idx === -1) return renderSetup(st);
+  if(S.idx >= QS.length) return renderReview(st);
+  return renderQuestion(st, QS[S.idx]);
+}
+
+/* --- صفحه‌ی شروع --- */
+function renderSetup(st){
+  st.appendChild(el("div","eyebrow","فرم داوری"));
+  st.appendChild(el("h1",null,"پروژه‌های پایانی"));
+  st.appendChild(el("p","dim","نام خودت را وارد کن، حوزه‌ی داوری و پروژه را انتخاب کن. سؤال‌ها یکی‌یکی و متناسب با حوزه‌ی تو نشان داده می‌شوند."));
+
+  const f1 = el("div","field");
+  f1.appendChild(el("label","fl","نام و نام خانوادگی داور"));
+  const inp = el("input"); inp.type="text"; inp.value=S.judgeName; inp.placeholder="مثلاً: مریم رضایی"; inp.autocomplete="name";
+  inp.oninput = e => { S.judgeName = e.target.value.trim(); validate(); };
+  f1.appendChild(inp); st.appendChild(f1);
+
+  const f2 = el("div","field");
+  f2.appendChild(el("label","fl","حوزه‌ی داوری"));
+  const sel = el("select");
+  sel.appendChild(new Option("— انتخاب کنید —",""));
+  sel.appendChild(new Option("داور فنی — بلوک ۲ و ۳ و گیت‌ها","فنی"));
+  sel.appendChild(new Option("داور بیزینس — بلوک ۱ و ۳","بیزینس"));
+  sel.value = S.judgeType;
+  sel.onchange = e => { S.judgeType = e.target.value; validate(); };
+  f2.appendChild(sel);
+  f2.appendChild(el("div","small","داور فنی کد را می‌خواند و اجرا می‌کند؛ داور بیزینس مسئله و ارزش را می‌سنجد. هر دو بلوک ۳ (ارائه و تسلط) را نمره می‌دهند."));
+  st.appendChild(f2);
+
+  const f3 = el("div","field");
+  f3.appendChild(el("label","fl","پروژه"));
+  const sp = el("select");
+  sp.appendChild(new Option("— انتخاب کنید —",""));
+  PROJECTS.forEach(p => sp.appendChild(new Option(p.id+" — "+p.student+" — "+p.title, p.id)));
+  sp.value = S.projectId;
+  sp.onchange = e => { S.projectId = e.target.value; validate(); };
+  f3.appendChild(sp);
+  const meta = el("div","small",""); meta.id = "pmeta";
+  f3.appendChild(meta); st.appendChild(f3);
+
+  const resume = el("div","note"); resume.id="resumeBox"; resume.style.display="none";
+  st.appendChild(resume);
+
+  const nav = el("div","nav");
+  const go = el("button","btn btn-primary","شروع پرسش‌ها"); go.id="startBtn"; go.disabled=true;
+  go.onclick = () => {
+    buildQuestions();
+    const had = loadDraft();
+    if(!S.startedAt) S.startedAt = Date.now();
+    S.idx = 0;
+    if(had){ // پرش به اولین سؤال بی‌پاسخ
+      const first = QS.findIndex(q => S.answers[q.id]===undefined || S.answers[q.id]==="");
+      S.idx = first === -1 ? QS.length : first;
+    }
+    saveDraft(); render(); window.scrollTo(0,0);
+  };
+  nav.appendChild(go);
+  st.appendChild(nav);
+
+  const ob = outbox();
+  if(ob.length){
+    const w = el("div","alert","<b>"+fa(ob.length)+" پاسخ ثبت‌نشده روی این دستگاه مانده است.</b> احتمالاً هنگام ارسال، اینترنت قطع بوده. ");
+    const rb = el("button","btn","تلاش دوباره برای ارسال"); rb.style.marginTop="10px";
+    rb.onclick = async () => { rb.disabled=true; rb.textContent="در حال ارسال…";
+      let ok=0; for(const r of ob){ if(await postRow(r)){ dropOutbox(r.submittedAt); ok++; } }
+      rb.textContent = ok===ob.length ? "همه ارسال شد ✓" : "‌"+fa(ok)+" از "+fa(ob.length)+" ارسال شد"; };
+    w.appendChild(rb);
+    st.appendChild(w);
+  }
+  validate();
+}
+
+function validate(){
+  const btn = $("startBtn"); if(!btn) return;
+  btn.disabled = !(S.judgeName && S.judgeType && S.projectId);
+  const p = project(), meta = $("pmeta");
+  if(meta) meta.innerHTML = p ? "نوع فنی: <b>"+esc(TYPE_LABEL[p.type])+"</b> · منتور بیزینس: "+esc(p.mentor) : "";
+  const rb = $("resumeBox");
+  if(rb){
+    let has=false;
+    if(S.judgeName && S.projectId){ try{ has = !!localStorage.getItem(draftKey()); }catch(e){} }
+    rb.style.display = has ? "block" : "none";
+    if(has) rb.innerHTML = "<b>یک پیش‌نویس نیمه‌تمام برای همین داور و همین پروژه پیدا شد.</b> با زدن دکمه‌ی زیر از اولین سؤال بی‌پاسخ ادامه می‌دهید.";
+  }
+}
+
+/* --- صفحه‌ی سؤال --- */
+function renderQuestion(st, q){
+  st.appendChild(el("div","eyebrow", esc(q.block) + " · " + esc(q.id)));
+  st.appendChild(el("h2","q", esc(q.title)));
+  if(q.guide) st.appendChild(el("div","guide", q.guide));
+
+  const cur = S.answers[q.id];
+
+  if(q.kind === "scale"){
+    const wrap = el("div","scale");
+    SCALE.forEach(s => {
+      const b = el("button","sb");
+      b.type="button"; b.setAttribute("aria-pressed", String(cur === s.v));
+      b.appendChild(el("span","n", fa(s.v)));
+      b.appendChild(el("span","t", esc(s.t)));
+      b.onclick = () => answer(q, s.v, true);
+      wrap.appendChild(b);
+    });
+    st.appendChild(wrap);
+    const na = el("button","na","نمی‌توانم قضاوت کنم — شواهد کافی ندیدم");
+    na.type="button"; na.setAttribute("aria-pressed", String(cur === "NA"));
+    na.onclick = () => answer(q, "NA", true);
+    st.appendChild(na);
+  }
+
+  else if(q.kind === "gate" || q.kind === "choice"){
+    const wrap = el("div","choices");
+    q.options.forEach((o,i) => {
+      const b = el("button","ch " + (o.cls||""));
+      b.type="button"; b.setAttribute("aria-pressed", String(cur === o.v));
+      b.appendChild(el("span","key", fa(i+1)));
+      const lab = el("span","lab", esc(o.label));
+      if(o.sub) lab.appendChild(el("span","sub", esc(o.sub)));
+      b.appendChild(lab);
+      b.onclick = () => answer(q, o.v, true);
+      wrap.appendChild(b);
+    });
+    st.appendChild(wrap);
+  }
+
+  else if(q.kind === "num10"){
+    const wrap = el("div","n10");
+    for(let i=0;i<=10;i++){
+      const b = el("button","nb", fa(i));
+      b.type="button"; b.setAttribute("aria-pressed", String(cur === i));
+      b.onclick = () => answer(q, i, true);
+      wrap.appendChild(b);
+    }
+    st.appendChild(wrap);
+  }
+
+  else if(q.kind === "text"){
+    const f = el("div","field");
+    const ta = el("textarea"); ta.value = cur || ""; ta.placeholder = q.ph || "";
+    ta.maxLength = 400;
+    const cnt = el("div","counter", fa((cur||"").length) + " / ۴۰۰");
+    ta.oninput = e => { S.answers[q.id] = e.target.value; cnt.textContent = fa(e.target.value.length)+" / ۴۰۰"; saveDraft(); syncNext(q); };
+    f.appendChild(ta); f.appendChild(cnt); st.appendChild(f);
+    setTimeout(()=>ta.focus(),60);
+  }
+
+  const nav = el("div","nav");
+  const back = el("button","btn","قبلی");
+  back.onclick = () => { S.idx--; render(); window.scrollTo(0,0); };
+  nav.appendChild(back);
+
+  const next = el("button","btn btn-primary", S.idx === QS.length-1 ? "بازبینی نهایی" : "بعدی");
+  next.id = "nextBtn";
+  next.disabled = !isAnswered(q);
+  next.onclick = () => { S.idx++; render(); window.scrollTo(0,0); };
+  nav.appendChild(next);
+
+  const skip = el("button","btn","فعلاً رد کن");
+  skip.onclick = () => { S.idx++; render(); window.scrollTo(0,0); };
+  nav.appendChild(skip);
+
+  if(q.kind === "scale") nav.appendChild(el("span","hint","<kbd>۱</kbd>–<kbd>۵</kbd> نمره · <kbd>N</kbd> بدون قضاوت · <kbd>Enter</kbd> بعدی"));
+  else if(q.kind === "gate" || q.kind === "choice") nav.appendChild(el("span","hint","<kbd>۱</kbd>–<kbd>"+fa(q.options.length)+"</kbd> انتخاب · <kbd>Enter</kbd> بعدی"));
+  else if(q.kind === "num10") nav.appendChild(el("span","hint","<kbd>۰</kbd>–<kbd>۹</kbd> · <kbd>Enter</kbd> بعدی"));
+
+  st.appendChild(nav);
+}
+
+function isAnswered(q){
+  const v = S.answers[q.id];
+  if(v === undefined || v === null) return false;
+  if(typeof v === "string" && v.trim() === "") return false;
+  return true;
+}
+function syncNext(q){ const b = $("nextBtn"); if(b) b.disabled = !isAnswered(q); }
+
+function answer(q, v, advance){
+  S.answers[q.id] = v;
+  saveDraft();
+  render();
+  if(advance){
+    setTimeout(() => { if(S.idx < QS.length){ S.idx++; render(); window.scrollTo(0,0); } }, 190);
+  }
+}
+
+/* --- بازبینی --- */
+function renderReview(st){
+  const p = project();
+  st.appendChild(el("div","eyebrow","مرحله‌ی آخر"));
+  st.appendChild(el("h1",null,"بازبینی و ثبت"));
+  st.appendChild(el("p","dim","قبل از ثبت یک بار مرور کن. روی هر ردیف بزنی، به همان سؤال برمی‌گردی."));
+
+  const missing = QS.filter(q => !isAnswered(q));
+  if(missing.length){
+    st.appendChild(el("div","alert","<b>"+fa(missing.length)+" سؤال بی‌پاسخ مانده است.</b> ثبت نهایی تا تکمیل آن‌ها فعال نمی‌شود: " + missing.map(m=>esc(m.id)).join("، ")));
+  } else {
+    st.appendChild(el("div","okbox","<b>همه‌ی سؤال‌ها پاسخ داده شده‌اند.</b> با ثبت نهایی، پاسخ‌ها در شیت داوری ذخیره می‌شوند."));
+  }
+
+  let curBlock = null, box = null;
+  QS.forEach((q,i) => {
+    if(q.block !== curBlock){
+      curBlock = q.block;
+      box = el("div","rev");
+      box.appendChild(el("div","rev-h", esc(curBlock)));
+      st.appendChild(box);
+    }
+    const row = el("button","rv");
+    row.appendChild(el("span","rid", esc(q.id)));
+    row.appendChild(el("span","rq", esc(q.title)));
+    const v = S.answers[q.id];
+    const shown = (v===undefined||v===null||v==="") ? "بی‌پاسخ"
+      : q.kind==="scale" ? (v==="NA" ? "بدون قضاوت" : fa(v)+" از ۵")
+      : q.kind==="num10" ? fa(v)+" از ۱۰"
+      : String(v);
+    const a = el("span","ra" + ((v===undefined||v===null||v==="") ? " empty":""), esc(shown));
+    row.appendChild(a);
+    row.onclick = () => { S.idx = i; render(); window.scrollTo(0,0); };
+    box.appendChild(row);
+  });
+
+  if(S.sendError) st.appendChild(el("div","alert", S.sendError));
+
+  const nav = el("div","nav");
+  const back = el("button","btn","برگشت به آخرین سؤال");
+  back.onclick = () => { S.idx = QS.length-1; render(); window.scrollTo(0,0); };
+  nav.appendChild(back);
+
+  const sub = el("button","btn btn-primary","ثبت نهایی");
+  sub.disabled = missing.length > 0 || S.sending;
+  if(S.sending) sub.innerHTML = '<span class="spin"></span>در حال ارسال…';
+  sub.onclick = submit;
+  nav.appendChild(sub);
+  st.appendChild(nav);
+}
+
+/* ============================================================
+   ۶) ارسال به شیت
+   ============================================================ */
+function buildRow(){
+  const p = project();
+  const a = S.answers;
+  const g = k => (a[k]===undefined||a[k]===null) ? "" : (a[k]==="NA" ? "NA" : a[k]);
+  return {
+    submittedAt: new Date().toISOString(),
+    judgeName: S.judgeName,
+    judgeType: S.judgeType,
+    projectId: p.id,
+    student: p.student,
+    projectTitle: p.title,
+    projectType: TYPE_LABEL[p.type],
+    G1:g("G1"), G2:g("G2"), G3:g("G3"), G4:g("G4"),
+    s1_1:g("1.1"), s1_2:g("1.2"), s1_3:g("1.3"), s1_4:g("1.4"),
+    s2_1:g("2.1"), s2_2:g("2.2"), s2_3:g("2.3"), s2_4:g("2.4"), s2_5:g("2.5"),
+    s3_1:g("3.1"), s3_2:g("3.2"), s3_3:g("3.3"),
+    O1:g("O1"), O2:g("O2"), O3:g("O3"), O4:g("O4"),
+    H1:g("H1"), H2:g("H2"), H3:g("H3"),
+    durationSec: S.startedAt ? Math.round((Date.now()-S.startedAt)/1000) : ""
+  };
+}
+
+async function postRow(row){
+  if(!SHEET_ENDPOINT || SHEET_ENDPOINT.indexOf("PASTE_YOUR") === 0) return false;
+  try{
+    const res = await fetch(SHEET_ENDPOINT, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify(row),
+      redirect:"follow"
+    });
+    if(!res.ok) return false;
+    const txt = await res.text();
+    return txt.indexOf("ok") !== -1;
+  }catch(e){ return false; }
+}
+
+async function submit(){
+  S.sending = true; S.sendError = ""; render();
+  const row = buildRow();
+  const ok = await postRow(row);
+  S.sending = false;
+  if(ok){ clearDraft(); renderDone(true, row); }
+  else {
+    pushOutbox(row);
+    renderDone(false, row);
+  }
+}
+
+function renderDone(ok, row){
+  S.idx = QS.length;
+  renderRail();
+  const st = $("stage"); st.innerHTML=""; st.className="stage fadein";
+  $("barfill").style.width = "100%";
+
+  if(ok){
+    st.appendChild(el("div","done-mark","✓"));
+    st.appendChild(el("h1",null,"ثبت شد"));
+    st.appendChild(el("p","dim","پاسخ‌های تو برای پروژه‌ی <b>"+esc(row.projectId)+" — "+esc(row.student)+"</b> در شیت داوری ذخیره شد. ممنون."));
+  } else {
+    st.appendChild(el("div","done-mark","!"));
+    st.appendChild(el("h1",null,"ارسال نشد"));
+    st.appendChild(el("div","alert","<b>پاسخ‌ها روی همین دستگاه ذخیره شدند و از بین نرفته‌اند.</b> ارسال به شیت انجام نشد — احتمالاً اینترنت قطع است یا آدرس شیت هنوز تنظیم نشده. صفحه را باز نگه دار و بعداً از صفحه‌ی شروع، دکمه‌ی «تلاش دوباره برای ارسال» را بزن. برای اطمینان، می‌توانی همین حالا یک نسخه‌ی فایل هم بگیری."));
+    const dl = el("button","btn","دانلود پاسخ‌ها به‌صورت فایل");
+    dl.onclick = () => {
+      const blob = new Blob([JSON.stringify(row,null,2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "davari-"+row.projectId+"-"+row.judgeName.replace(/\s+/g,"_")+".json";
+      a.click(); URL.revokeObjectURL(a.href);
+    };
+    st.appendChild(dl);
+  }
+
+  const nav = el("div","nav");
+  const again = el("button","btn btn-primary","داوری پروژه‌ی بعدی");
+  again.onclick = () => {
+    S.projectId=""; S.answers={}; S.idx=-1; S.startedAt=null; S.sendError="";
+    render(); window.scrollTo(0,0);
+  };
+  nav.appendChild(again);
+  st.appendChild(nav);
+}
+
+/* ============================================================
+   ۷) میان‌بر صفحه‌کلید
+   ============================================================ */
+document.addEventListener("keydown", e => {
+  if(S.idx < 0 || S.idx >= QS.length) return;
+  const q = QS[S.idx];
+  const typing = ["TEXTAREA","INPUT","SELECT"].indexOf(document.activeElement.tagName) !== -1;
+
+  if(e.key === "Enter" && !e.shiftKey){
+    if(typing && document.activeElement.tagName === "TEXTAREA" && !e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    if(isAnswered(q)){ S.idx++; render(); window.scrollTo(0,0); }
+    return;
+  }
+  if(typing) return;
+
+  if(q.kind === "scale"){
+    if(e.key >= "1" && e.key <= "5") { e.preventDefault(); answer(q, +e.key, true); }
+    else if(e.key.toLowerCase() === "n") { e.preventDefault(); answer(q, "NA", true); }
+  } else if(q.kind === "gate" || q.kind === "choice"){
+    const i = +e.key;
+    if(i >= 1 && i <= q.options.length){ e.preventDefault(); answer(q, q.options[i-1].v, true); }
+  } else if(q.kind === "num10"){
+    if(e.key >= "0" && e.key <= "9"){ e.preventDefault(); answer(q, +e.key, true); }
+  }
+});
+
+window.addEventListener("beforeunload", e => {
+  if(S.idx >= 0 && S.idx < QS.length && Object.keys(S.answers).length){ e.preventDefault(); e.returnValue = ""; }
+});
+
+render();
+</script>
+</body>
+</html>
